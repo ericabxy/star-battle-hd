@@ -12,14 +12,18 @@ local Explosion = {
   speed = 500,
 }
 
-function Explosion:Explosion(x, y, sprite)
+function Explosion:Explosion(sprite, x, y)
   self.position = vector.new(x, y)
   -- setup the sprite
   self.sprite = sprite
   self.sprite.position = self.position
   self.sprite.origin.ox = 64
   self.sprite.origin.oy = 64
-  self.sprite.scale = { sx = 1.00, sy = 1.00 }
+end
+
+function Explosion:despawn()
+  self.remove_me_from_all_lists = true
+  self.sprite.remove_me_from_all_lists = true
 end
 
 function Explosion:update(dt)
@@ -31,7 +35,7 @@ function Explosion:update(dt)
       self.sprite.animation.frame = self.sprite.animation.frame + 1
       self.sprite.quad = self.sprite.animation.quads[self.sprite.animation.frame + 1]
     else
-      self.remove_me_from_all_lists = true
+      self:despawn()
     end
   end
 end

@@ -11,7 +11,7 @@ local Rock = {
   speed = 20,
 }
 
-function Rock:Rock(x, y, sprite)
+function Rock:Rock(sprite, x, y)
   local _, _, width, height = sprite.quad:getViewport()
   self.position = vector.new(x, y)
   self.velocity = vector.new(0, 0)
@@ -25,6 +25,11 @@ function Rock:Rock(x, y, sprite)
   --
   self.hitbox = hitbox.new((-width / 8) * 3, (-height / 8) * 3, (width / 8) * 7, (height / 8) * 7)
   self.hitbox.origin = self.position
+end
+
+function Rock:despawn()
+  self.remove_me_from_all_lists = true
+  self.sprite.remove_me_from_all_lists = true
 end
 
 function Rock:update(dt)

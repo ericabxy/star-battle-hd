@@ -12,17 +12,17 @@ local Starship = {
   left_key = false,
   right_key = false,
   up_key = false,
-  fire_key = false,
+  fire_key = false
 }
 
-function Starship:Starship(texture, x, y)
+function Starship:Starship(sprite, x, y)
   local quad = love.graphics.newQuad(0, 0, 64, 32, 128, 192)
   -- new position and angle so its not glued to the base class
   self.position = vector.new(x, y)
   self.velocity = vector.new(0, 0)
   self.angle = { r = 0 }
   -- setup the sprite and everything else
-  self.sprite = sprite.new(texture, quad)
+  self.sprite = sprite
   self.sprite.position = self.position
   self.sprite.angle = self.angle
   self.sprite.origin.ox = 32

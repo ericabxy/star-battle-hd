@@ -1,7 +1,6 @@
 --- a short description
 -- @classmod bullet
 local hitbox = require('src.hitbox')
-local sprite = require('src.sprite')
 local vector = require('src.vector')
 
 local bullet = {}
@@ -13,18 +12,23 @@ local Bullet = {
   speed = 500,
 }
 
-function Bullet:Bullet(texture, quad, position, angle)
+function Bullet:Bullet(sprite, x, y, angle)
   local quad = love.graphics.newQuad(0, 0, 16, 4, 16, 4)
-  self.position = vector.new(position.x, position.y)
+  self.position = vector.new(x, y)
   self.velocity = vector.new(0, 0)
-  self.angle = { r = angle.r }
-  self.sprite = sprite.new(texture, quad)
+  self.angle = { r = angle }
+  self.sprite = sprite
   self.sprite.position = self.position
   self.sprite.angle = self.angle
   self.sprite.origin.ox = 8
   self.sprite.origin.oy = 2
   self.hitbox = hitbox.new(-8, -8, 16, 16)
   self.hitbox.origin = self.position
+end
+
+function Bullet:despawn()
+  self.remove_me_from_all_lists = true
+  self.sprite.remove_me_from_all_lists = true
 end
 
 function Bullet:update(dt)

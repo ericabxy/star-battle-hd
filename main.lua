@@ -33,7 +33,9 @@ end
 
 function love.update(dt)
   if player_one:is_firing(dt) then
-    programs.spawn_bullet(player_one.position, player_one.angle)
+    local x = player_one.position.x + math.cos(player_one.angle.r) * 32
+    local y = player_one.position.y + math.sin(player_one.angle.r) * 32
+    programs.spawn_bullet(x, y, player_one.angle.r)
   end
   programs.advance_physics(dt)
 end
