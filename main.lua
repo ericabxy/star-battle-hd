@@ -11,34 +11,40 @@ local GREEN = 'green'
 local MAGENTA = 'magenta'
 local ORANGE = 'orange'
 local YELLOW = 'yellow'
-local ESCAPE = 'escape'
 
-local player_one = programs.spawn_starship(BLUE, 160, 160)
-player_one.left_key = 'left'
-player_one.right_key = 'right'
-player_one.up_key = 'up'
-player_one.fire_key = 's'
-local player_two = programs.spawn_starship(CYAN, 2400, 160)
-player_two.left_key = 'j'
-player_two.right_key = 'l'
-player_two.up_key = 'i'
-local player_three = programs.spawn_starship(GREEN, 1120, 1280)
-local player_four = programs.spawn_starship(MAGENTA, 1440, 1280)
-local player_five = programs.spawn_starship(ORANGE, 160, 2400)
-local player_six = programs.spawn_starship(YELLOW, 2400, 2400)
+local players = {}
+
+function game_mode_01()
+  players[1] = programs.spawn_starship(BLUE, 160, 160)
+  players[1].left_key = 'left'
+  players[1].right_key = 'right'
+  players[1].up_key = 'up'
+  players[1].fire_key = 's'
+  players[2] = programs.spawn_starship(CYAN, 2400, 160)
+  players[2].left_key = 'j'
+  players[2].right_key = 'l'
+  players[2].up_key = 'i'
+  players[3] = programs.spawn_starship(GREEN, 1120, 1280)
+  players[4] = programs.spawn_starship(MAGENTA, 1440, 1280)
+  players[5] = programs.spawn_starship(ORANGE, 160, 2400)
+  players[6] = programs.spawn_starship(YELLOW, 2400, 2400)
+end
 
 function love.load()
+  game_mode_01()
   --programs.spawn_rock(500, 500)
 end
 
 function love.update(dt)
-  if player_one:is_firing(dt) then
-    local x = player_one.position.x + math.cos(player_one.angle.r) * 32
-    local y = player_one.position.y + math.sin(player_one.angle.r) * 32
-    programs.spawn_bullet(x, y, player_one.angle.r)
+  if players[1] and players[1]:is_firing(dt) then
+    local x = players[1].position.x + math.cos(players[1].angle.r) * 32
+    local y = players[1].position.y + math.sin(players[1].angle.r) * 32
+    programs.spawn_bullet(x, y, players[1].angle.r)
   end
   programs.advance_physics(dt)
 end
+
+local ESCAPE = 'escape'
 
 function love.keypressed(key)
   if key == 'escape' then

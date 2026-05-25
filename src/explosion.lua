@@ -1,6 +1,5 @@
 --- a short description
 -- @classmod explosion
-local sprite = require('src.sprite')
 local vector = require('src.vector')
 
 local explosion = {}

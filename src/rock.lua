@@ -1,7 +1,6 @@
 --- a short description
 -- @classmod src.rock
 local hitbox = require('src.hitbox')
-local sprite = require('src.sprite')
 local vector = require('src.vector')
 
 local rock = {}

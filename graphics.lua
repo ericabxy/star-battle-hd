@@ -2,9 +2,12 @@ local asteroids = require('share.the_scientist___asteroids')
 local backgrounds = require('share.bonsaiheldin_backgrounds')
 local bullet = require('share.the_scientist___spaceship_set_bullet')
 local explosion = require('share.the_scientist___explosion')
+local imagefont = require('share.domsson_ascii_bitmap_font_futuristic')
+local imagefont = require('share.congusbongus_dos_8x8_font')
 local starships = require('share.the_scientist___spaceships')
 local weapons = require('share.the_scientist___spaceship_set_weapons')
 local sprite = require('src.sprite')
+local galactic_map = require('galactic_map')
 
 local graphics = {
   sprites = {},  -- methods to return sprite objects
@@ -91,6 +94,11 @@ function love.draw()
       graphics.draw_sprite_layer(graphics.sprites_layer_1)
       graphics.draw_sprite_layer(graphics.sprites_layer_2)
     end
+  end
+  if love.keyboard.isDown('g') then
+    love.graphics.origin()
+    love.graphics.scale(2.4, 2.4)
+    galactic_map.paint(imagefont)
   end
 end
 

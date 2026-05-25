@@ -9,11 +9,11 @@ local Sprite = {
 }
 
 function Sprite:Sprite(texture, quad)
-  self.animation = { frame = 0, timer = 0, flag = 30, textures = { texture }, quads = { quad }}
+  self.animation = { frame = 0, timer = 0, flag = 30 }
   self.texture = type(texture) == 'table' and texture[1] or texture
   self.quad = type(quad) == 'table' and quad[1] or quad
-  if type(texture) == 'table' then self.animation.textures = texture  end 
-  if type(quad) == 'table' then self.animation.quads = quad end 
+  self.animation.textures = type(texture) == 'table' and texture or { texture }
+  self.animation.quads = type(quad) == 'table' and quad or { quad }
   self.origin = { ox = 0, oy = 0 }
 end
 
