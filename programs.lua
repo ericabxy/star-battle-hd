@@ -46,7 +46,7 @@ function programs.advance_physics(dt)
     for b = #bullets_t, 1, -1 do
       local bullet = bullets_t[b]
       if bullet.remove_me_from_all_lists == false and rock.hitbox:test_hitbox(bullet.hitbox) then
-        programs.spawn_explosion(rock.position, .5)
+        programs.spawn_explosion(rock.position.x, rock.position.y, .5)
         programs.spawn_rock(rock.position.x, rock.position.y, MEDIUM)
         programs.spawn_rock(rock.position.x, rock.position.y, MEDIUM)
         bullet.remove_me_from_all_lists = true
@@ -63,7 +63,7 @@ function programs.advance_physics(dt)
     for b = #bullets_t, 1, -1 do
       local bullet = bullets_t[b]
       if bullet.remove_me_from_all_lists == false and rock.hitbox:test_hitbox(bullet.hitbox) then
-        programs.spawn_explosion(rock.position, .5)
+        programs.spawn_explosion(rock.position.x, rock.position.y, .5)
         programs.spawn_rock(rock.position.x, rock.position.y, SMALL)
         programs.spawn_rock(rock.position.x, rock.position.y, SMALL)
         bullet.remove_me_from_all_lists = true
@@ -80,7 +80,7 @@ function programs.advance_physics(dt)
     for b = #bullets_t, 1, -1 do
       local bullet = bullets_t[b]
       if bullet.remove_me_from_all_lists == false and rock.hitbox:test_hitbox(bullet.hitbox) then
-        programs.spawn_explosion(rock.position, .25)
+        programs.spawn_explosion(rock.position.x, rock.position.y, .25)
         bullet.remove_me_from_all_lists = true
         rock.remove_me_from_all_lists = true
       end
@@ -104,9 +104,8 @@ function programs.spawn_bullet(position, angle)
   table.insert(graphics.objects_layer_2, new_bullet)
 end
 
-function programs.spawn_explosion(position, size)
-  local spawn = explosion.new(graphics.explosion.texture, position)
-  spawn.sprite.animation.quads = graphics.explosion.animation_quads
+function programs.spawn_explosion(x, y, size)
+  local spawn = explosion.new(x, y, graphics.explosion(size))
   spawn.sprite.scale = { sx = size, sy = size }
   table.insert(explosions_t, spawn)
   table.insert(graphics.objects_layer_2, spawn)
@@ -114,7 +113,7 @@ end
 
 function programs.spawn_rock(x, y, size)
   local quad = graphics.asteroids.quads[size][love.math.random(3)]
-  local new_rock = rock.new(graphics.asteroids[size], quad, x, y)
+  local new_rock = rock.new(x, y, graphics.asteroid(size))
   table.insert(rocks_tables[size], new_rock)
   table.insert(graphics.objects_layer_0, new_rock)
 end

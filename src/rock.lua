@@ -11,15 +11,15 @@ local Rock = {
   speed = 20,
 }
 
-function Rock:Rock(texture, quad, x, y)
-  local _, _, width, height = quad:getViewport()
+function Rock:Rock(x, y, sprite)
+  local _, _, width, height = sprite.quad:getViewport()
   self.position = vector.new(x, y)
   self.velocity = vector.new(0, 0)
   self.angle = { r = love.math.random() * (2 * math.pi) }
   --
-  self.sprite = sprite.new(texture, quad)
-  self.sprite.position = self.position
-  self.sprite.angle = self.angle
+  self.sprite = sprite
+  self.sprite.position = self.position  -- sprite and rock reference same position
+  self.sprite.angle = self.angle  -- sprite and rock reference same angle
   self.sprite.origin.ox = width / 2
   self.sprite.origin.oy = height / 2
   --

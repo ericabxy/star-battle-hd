@@ -3,19 +3,16 @@ local sprite = {}
 
 -- class table
 local Sprite = {
-  origin = nil,  -- uninitialized
   position = { x = 0, y = 0 },
   scale = { sx = 1, sy = 1 },
   angle = { r = 0 },
-  texture = false,
-  quad = false,
 }
 
-function Sprite:Sprite(texture, quad)
+function Sprite:Sprite(texture, quad, quads_t)
   self.origin = { ox = 0, oy = 0 }
   self.texture = texture
   self.quad = quad
-  self.animation = { frame = 0, timer = 0 }
+  self.animation = { frame = 0, timer = 0, quads = quads_t, flag = 30 }
 end
 
 function Sprite:paint(x, y)
@@ -31,6 +28,19 @@ function Sprite:paint(x, y)
     self.origin.ox,
     self.origin.oy
   )
+end
+
+function Sprite:animate(dt)
+  self.animation.timer = self.animation.timer + dt * 1000
+  if self.animation.timer > self.animation.flag then
+    self.animation.timer = self.animation.timer % self.animation.flag
+    if self.animation.frame < #self.animation.quads then
+      self.animation.frame = self.animation.frame + 1
+      self.quad = self.animation.quads[self.animation.frame + 1]
+    else
+      self.remove_me_from_all_lists = true
+    end
+  end
 end
 
 function sprite.new(...)

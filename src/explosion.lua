@@ -12,11 +12,10 @@ local Explosion = {
   speed = 500,
 }
 
-function Explosion:Explosion(texture, position)
-  local quad = love.graphics.newQuad(0, 0, 128, 128, 384, 512)
-  self.position = vector.new(position.x, position.y)
+function Explosion:Explosion(x, y, sprite)
+  self.position = vector.new(x, y)
   -- setup the sprite
-  self.sprite = sprite.new(texture, quad)
+  self.sprite = sprite
   self.sprite.position = self.position
   self.sprite.origin.ox = 64
   self.sprite.origin.oy = 64

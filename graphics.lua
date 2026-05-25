@@ -1,3 +1,7 @@
+local asteroids = require('share.the_scientist___asteroids')
+local explosion = require('share.the_scientist___explosion')
+local sprite = require('src.sprite')
+
 local graphics = {
   bullet = require('share.the_scientist___spaceship_set_bullet'),
   spaceships = require('share.the_scientist___spaceships'),
@@ -7,6 +11,9 @@ local graphics = {
   objects_layer_0 = {},
   objects_layer_1 = {},
   objects_layer_2 = {},
+  sprites_layer_0 = {},
+  sprites_layer_1 = {},
+  sprites_layer_2 = {},
 }
 
 local background_image01 = love.graphics.newImage('share/spr_stars01.png')
@@ -39,6 +46,15 @@ end
 function graphics.scroll_to(x, y)
   graphics.scroll.x = x - 400
   graphics.scroll.y = y - 225
+end
+
+function graphics.asteroid(size)
+  local quad = asteroids.quads[size][love.math.random(3)]
+  return sprite.new(asteroids[size], quad)
+end
+
+function graphics.explosion(size)
+  return sprite.new(explosion.texture, explosion.animation_quads[1], explosion.animation_quads)
 end
 
 function love.draw()
