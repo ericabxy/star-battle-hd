@@ -12,7 +12,7 @@ local Starship = {
   left_key = false,
   right_key = false,
   up_key = false,
-  fire_key = false
+  fire_key = false,
 }
 
 function Starship:Starship(sprite, x, y)

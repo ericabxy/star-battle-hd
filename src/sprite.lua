@@ -8,11 +8,13 @@ local Sprite = {
   angle = { r = 0 },
 }
 
-function Sprite:Sprite(texture, quad, quads_t)
+function Sprite:Sprite(texture, quad)
+  self.animation = { frame = 0, timer = 0, flag = 30, textures = { texture }, quads = { quad }}
+  self.texture = type(texture) == 'table' and texture[1] or texture
+  self.quad = type(quad) == 'table' and quad[1] or quad
+  if type(texture) == 'table' then self.animation.textures = texture  end 
+  if type(quad) == 'table' then self.animation.quads = quad end 
   self.origin = { ox = 0, oy = 0 }
-  self.texture = texture
-  self.quad = quad
-  self.animation = { frame = 0, timer = 0, quads = quads_t, flag = 30 }
 end
 
 function Sprite:paint(x, y)

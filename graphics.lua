@@ -29,14 +29,14 @@ function graphics.sprites.bullet()
 end
 
 function graphics.sprites.explosion(size)
-  local sprite = sprite.new(explosion.texture, explosion.animation_quads[1], explosion.animation_quads)
+  local sprite = sprite.new(explosion.texture, explosion.animation_quads)
   if size then sprite.scale = { sx = size, sy = size } end
   table.insert(graphics.sprites_layer_2, sprite)
   return sprite
 end
 
 function graphics.sprites.starship(color)
-  local sprite = sprite.new(starships[color][1], starships.animation_quads[1], starships.animation_quads)
+  local sprite = sprite.new(starships[color], starships.animation_quads)
   table.insert(graphics.sprites_layer_1, sprite)
   return sprite
 end
