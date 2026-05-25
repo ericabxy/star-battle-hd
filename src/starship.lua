@@ -39,7 +39,7 @@ function Starship:animate_normal(dt)
   if self.sprite.animation.timer > flag then
     self.sprite.animation.timer = self.sprite.animation.timer % flag
     self.sprite.animation.frame = (self.sprite.animation.frame + 1) % 12
-    self.sprite.quad:setViewport((self.sprite.animation.frame % 2) * 64, math.floor(self.sprite.animation.frame / 2) * 32 % 192, 64, 32)
+    self.sprite.quad = self.sprite.animation.quads[self.sprite.animation.frame + 1]
   end
 end
 

@@ -13,7 +13,7 @@ local Bullet = {
   speed = 500,
 }
 
-function Bullet:Bullet(texture, position, angle)
+function Bullet:Bullet(texture, quad, position, angle)
   local quad = love.graphics.newQuad(0, 0, 16, 4, 16, 4)
   self.position = vector.new(position.x, position.y)
   self.velocity = vector.new(0, 0)

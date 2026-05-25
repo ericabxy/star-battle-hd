@@ -88,51 +88,51 @@ function programs.advance_physics(dt)
 end
 
 function programs.spawn_bullet(position, angle)
-  local new_bullet = bullet.new(graphics.bullet, position, angle)
+  local new_bullet = bullet.new(graphics.bullet.texture, graphics.bullet.quad, position, angle)
   table.insert(bullets_t, new_bullet)
   table.insert(graphics.objects_layer_2, new_bullet)
 end
 
 function programs.spawn_explosion(position)
-  local new_explosion = explosion.new(graphics.electric_explosion, position)
-  table.insert(explosions_t, new_explosion)
-  table.insert(graphics.objects_layer_2, new_explosion)
+  local spawn = explosion.new(graphics.explosion.texture, position)
+  spawn.sprite.animation.quads = graphics.explosion.animation_quads
+  table.insert(explosions_t, spawn)
+  table.insert(graphics.objects_layer_2, spawn)
 end
 
 function programs.spawn_explosion_medium(position)
-  local new_explosion = explosion.new(graphics.electric_explosion, position)
-  new_explosion.sprite.scale = { sx = .5, sy = .5 }
-  table.insert(explosions_t, new_explosion)
-  table.insert(graphics.objects_layer_2, new_explosion)
+  local spawn = explosion.new(graphics.explosion.texture, position)
+  spawn.sprite.animation.quads = graphics.explosion.animation_quads
+  spawn.sprite.scale = { sx = .5, sy = .5 }
+  table.insert(explosions_t, spawn)
+  table.insert(graphics.objects_layer_2, spawn)
 end
 
 function programs.spawn_explosion_small(position)
-  local new_explosion = explosion.new(graphics.electric_explosion, position)
-  new_explosion.sprite.scale = { sx = .25, sy = .25 }
-  table.insert(explosions_t, new_explosion)
-  table.insert(graphics.objects_layer_2, new_explosion)
+  local spawn = explosion.new(graphics.explosion.texture, position)
+  spawn.sprite.animation.quads = graphics.explosion.animation_quads
+  spawn.sprite.scale = { sx = .25, sy = .25 }
+  table.insert(explosions_t, spawn)
+  table.insert(graphics.objects_layer_2, spawn)
 end
 
 function programs.spawn_rock(x, y)
-  local tile_variant = love.math.random(3) - 1
-  local quad = love.graphics.newQuad((tile_variant % 2) * 64, math.floor(tile_variant / 2) * 64, 64, 64, 128, 128)
-  local new_rock = rock.new(graphics.rocks['big'], quad, x, y)
+  local quad = graphics.asteroids.quads.big[love.math.random(3)]
+  local new_rock = rock.new(graphics.asteroids['big'], quad, x, y)
   table.insert(rocks_t, new_rock)
   table.insert(graphics.objects_layer_0, new_rock)
 end
 
 function programs.spawn_rock_medium(x, y)
-  local tile_variant = love.math.random(3) - 1
-  local quad = love.graphics.newQuad((tile_variant % 2) * 32, math.floor(tile_variant / 2) * 32, 32, 32, 64, 64)
-  local new_rock = rock.new(graphics.rocks['med'], quad, x, y)
+  local quad = graphics.asteroids.quads.med[love.math.random(3)]
+  local new_rock = rock.new(graphics.asteroids['med'], quad, x, y)
   table.insert(rocks_medium_t, new_rock)
   table.insert(graphics.objects_layer_0, new_rock)
 end
 
 function programs.spawn_rock_small(x, y)
-  local tile_variant = love.math.random(3) - 1
-  local quad = love.graphics.newQuad((tile_variant % 2) * 16, math.floor(tile_variant / 2) * 16, 16, 16, 32, 32)
-  local new_rock = rock.new(graphics.rocks['small'], quad, x, y)
+  local quad = graphics.asteroids.quads.small[love.math.random(3)]
+  local new_rock = rock.new(graphics.asteroids['small'], quad, x, y)
   table.insert(rocks_small_t, new_rock)
   table.insert(graphics.objects_layer_0, new_rock)
 end
@@ -148,10 +148,11 @@ function programs.spawn_rock_randomly()
 end
 
 function programs.spawn_starship(color, x, y)
-  local new_starship = starship.new(graphics.starships[color][1], x, y)
-  table.insert(starships_t, new_starship)
-  table.insert(graphics.objects_layer_2, new_starship)
-  return new_starship
+  local spawn = starship.new(graphics.spaceships[color][1], x, y)
+  spawn.sprite.animation.quads = graphics.spaceships.animation_quads
+  table.insert(starships_t, spawn)
+  table.insert(graphics.objects_layer_2, spawn)
+  return spawn
 end
 
 return programs
