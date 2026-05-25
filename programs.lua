@@ -5,28 +5,28 @@ local explosion = require('src.explosion')
 local rock = require('src.rock')
 local starship = require('src.starship')
 
+local LARGE = 'big'
+local MEDIUM = 'med'
+local SMALL = 'small'
+
 local programs = {}
 
 -- object tables
 local bullets_t = {}
 local explosions_t = {}
 local starships_t = {}
-local rocks_t = {}
+local rocks_large_t = {}
 local rocks_medium_t = {}
 local rocks_small_t = {}
+local rocks_tables = {
+  [LARGE] = rocks_large_t,
+  [MEDIUM] = rocks_medium_t,
+  [SMALL] = rocks_small_t
+}
 
 function programs.advance_physics(dt)
   for x = #bullets_t, 1, -1 do
     bullets_t[x]:update(dt)
-    for _, rock in ipairs(rocks_t) do
-      if rock.hitbox:test_hitbox(bullets_t[x].hitbox) then
-        programs.spawn_explosion(rock.position)
-        programs.spawn_rock_medium(rock.position.x, rock.position.y)
-        programs.spawn_rock_medium(rock.position.x, rock.position.y)
-        bullets_t[x].remove_me_from_all_lists = true
-        rock.remove_me_from_all_lists = true
-      end
-    end
     if bullets_t[x].remove_me_from_all_lists then
       table.remove(bullets_t, x)
     end
@@ -37,10 +37,21 @@ function programs.advance_physics(dt)
       table.remove(explosions_t, x)
     end
   end
-  for x = #rocks_t, 1, -1 do    
-    rocks_t[x]:update(dt)
-    if rocks_t[x].remove_me_from_all_lists then
-      table.remove(rocks_t, x)
+  for x = #rocks_large_t, 1, -1 do    
+    local rock = rocks_large_t[x]
+    rock:update(dt)
+    if rock.remove_me_from_all_lists then
+      table.remove(rocks_large_t, x)
+    end
+    for b = #bullets_t, 1, -1 do
+      local bullet = bullets_t[b]
+      if bullet.remove_me_from_all_lists == false and rock.hitbox:test_hitbox(bullet.hitbox) then
+        programs.spawn_explosion(rock.position, .5)
+        programs.spawn_rock(rock.position.x, rock.position.y, MEDIUM)
+        programs.spawn_rock(rock.position.x, rock.position.y, MEDIUM)
+        bullet.remove_me_from_all_lists = true
+        rock.remove_me_from_all_lists = true
+      end
     end
   end
   for x = #rocks_medium_t, 1, -1 do
@@ -52,9 +63,9 @@ function programs.advance_physics(dt)
     for b = #bullets_t, 1, -1 do
       local bullet = bullets_t[b]
       if bullet.remove_me_from_all_lists == false and rock.hitbox:test_hitbox(bullet.hitbox) then
-        programs.spawn_explosion_medium(rock.position)
-        programs.spawn_rock_small(rock.position.x, rock.position.y)
-        programs.spawn_rock_small(rock.position.x, rock.position.y)
+        programs.spawn_explosion(rock.position, .5)
+        programs.spawn_rock(rock.position.x, rock.position.y, SMALL)
+        programs.spawn_rock(rock.position.x, rock.position.y, SMALL)
         bullet.remove_me_from_all_lists = true
         rock.remove_me_from_all_lists = true
       end
@@ -69,7 +80,7 @@ function programs.advance_physics(dt)
     for b = #bullets_t, 1, -1 do
       local bullet = bullets_t[b]
       if bullet.remove_me_from_all_lists == false and rock.hitbox:test_hitbox(bullet.hitbox) then
-        programs.spawn_explosion_small(rock.position)
+        programs.spawn_explosion(rock.position, .25)
         bullet.remove_me_from_all_lists = true
         rock.remove_me_from_all_lists = true
       end
@@ -81,7 +92,7 @@ function programs.advance_physics(dt)
       table.remove(starships_t, x)
     end
   end
-  if #rocks_t < 20 and love.math.random(100) == 1 then
+  if #rocks_large_t < 20 and love.math.random(100) == 1 then
     programs.spawn_rock_randomly()
   end
   graphics.scroll_to(starships_t[1].position.x, starships_t[1].position.y)
@@ -93,47 +104,18 @@ function programs.spawn_bullet(position, angle)
   table.insert(graphics.objects_layer_2, new_bullet)
 end
 
-function programs.spawn_explosion(position)
+function programs.spawn_explosion(position, size)
   local spawn = explosion.new(graphics.explosion.texture, position)
   spawn.sprite.animation.quads = graphics.explosion.animation_quads
+  spawn.sprite.scale = { sx = size, sy = size }
   table.insert(explosions_t, spawn)
   table.insert(graphics.objects_layer_2, spawn)
 end
 
-function programs.spawn_explosion_medium(position)
-  local spawn = explosion.new(graphics.explosion.texture, position)
-  spawn.sprite.animation.quads = graphics.explosion.animation_quads
-  spawn.sprite.scale = { sx = .5, sy = .5 }
-  table.insert(explosions_t, spawn)
-  table.insert(graphics.objects_layer_2, spawn)
-end
-
-function programs.spawn_explosion_small(position)
-  local spawn = explosion.new(graphics.explosion.texture, position)
-  spawn.sprite.animation.quads = graphics.explosion.animation_quads
-  spawn.sprite.scale = { sx = .25, sy = .25 }
-  table.insert(explosions_t, spawn)
-  table.insert(graphics.objects_layer_2, spawn)
-end
-
-function programs.spawn_rock(x, y)
-  local quad = graphics.asteroids.quads.big[love.math.random(3)]
-  local new_rock = rock.new(graphics.asteroids['big'], quad, x, y)
-  table.insert(rocks_t, new_rock)
-  table.insert(graphics.objects_layer_0, new_rock)
-end
-
-function programs.spawn_rock_medium(x, y)
-  local quad = graphics.asteroids.quads.med[love.math.random(3)]
-  local new_rock = rock.new(graphics.asteroids['med'], quad, x, y)
-  table.insert(rocks_medium_t, new_rock)
-  table.insert(graphics.objects_layer_0, new_rock)
-end
-
-function programs.spawn_rock_small(x, y)
-  local quad = graphics.asteroids.quads.small[love.math.random(3)]
-  local new_rock = rock.new(graphics.asteroids['small'], quad, x, y)
-  table.insert(rocks_small_t, new_rock)
+function programs.spawn_rock(x, y, size)
+  local quad = graphics.asteroids.quads[size][love.math.random(3)]
+  local new_rock = rock.new(graphics.asteroids[size], quad, x, y)
+  table.insert(rocks_tables[size], new_rock)
   table.insert(graphics.objects_layer_0, new_rock)
 end
 
@@ -144,7 +126,7 @@ function programs.spawn_rock_randomly()
       return
     end
   end
-  programs.spawn_rock(x, y)
+  programs.spawn_rock(x, y, LARGE)
 end
 
 function programs.spawn_starship(color, x, y)
