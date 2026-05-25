@@ -52,10 +52,6 @@ function Starship:is_firing(dt)
   end
 end
 
-function Starship:paint(scroll)
-  self.sprite:paint(-scroll.x, -scroll.y)
-end
-
 function Starship:update(dt)
   local turn_speed = 3.5
   local ship_speed = 100

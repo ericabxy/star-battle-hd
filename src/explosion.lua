@@ -22,10 +22,6 @@ function Explosion:Explosion(x, y, sprite)
   self.sprite.scale = { sx = 1.00, sy = 1.00 }
 end
 
-function Explosion:paint(scroll)
-  self.sprite:paint(-scroll.x, -scroll.y)
-end
-
 function Explosion:update(dt)
   local flag = 30  -- frame lag time in seconds
   self.sprite.animation.timer = self.sprite.animation.timer + dt * 1000

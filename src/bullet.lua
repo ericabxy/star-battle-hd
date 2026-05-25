@@ -27,10 +27,6 @@ function Bullet:Bullet(texture, quad, position, angle)
   self.hitbox.origin = self.position
 end
 
-function Bullet:paint(scroll)
-  self.sprite:paint(-scroll.x, -scroll.y)
-end
-
 function Bullet:update(dt)
   self.position.x = (self.position.x + math.cos(self.angle.r) * self.speed * dt) % 2560
   self.position.y = (self.position.y + math.sin(self.angle.r) * self.speed * dt) % 2560
